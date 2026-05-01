@@ -22,21 +22,18 @@ app = FastAPI(
     lifespan=lifespan,
 )
 
-# CORS — read from env var (comma-separated list)
-allowed_origins_env = os.getenv(
-    "ALLOWED_ORIGINS",
-    "http://localhost:5173,http://127.0.0.1:5173",
-)
-allowed_origins = [o.strip() for o in allowed_origins_env.split(",") if o.strip()]
+origins = [
+    "http://localhost:3000", # Allow local frontend development
+    "https://team-task-manager-five-sigma.vercel.app", # Allow your deployed Vercel frontend
+]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=allowed_origins,
+    allow_origins=origins,
     allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+    allow_methods=["*"], # Allows all HTTP methods (GET, POST, PUT, DELETE, etc.)
+    allow_headers=["*"], # Allows all headers
 )
-
 # Routes
 app.include_router(auth_routes.router)
 app.include_router(project_routes.router)

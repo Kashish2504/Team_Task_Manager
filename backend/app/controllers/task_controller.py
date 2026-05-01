@@ -37,17 +37,12 @@ async def _enrich_task(task: dict, db) -> dict:
         project_name = project["name"]
 
     due_date = task.get("due_date")
-    is_overdue = bool(
-        due_date
-        and task.get("status") != "DONE"
-        and due_date.replace(tzinfo=timezone.utc) if due_date.tzinfo is None else due_date
-    )
-    if due_date:
+    
+    is_overdue = False
+    if due_date and task.get("status") != "DONE":
         # normalize tz
         d = due_date if due_date.tzinfo else due_date.replace(tzinfo=timezone.utc)
-        is_overdue = d < now and task.get("status") != "DONE"
-    else:
-        is_overdue = False
+        is_overdue = d < now
 
     return {
         "id": str(task["_id"]),

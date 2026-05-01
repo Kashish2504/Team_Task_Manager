@@ -27,12 +27,13 @@ origins = [
     "https://team-task-manager-five-sigma.vercel.app", # Allow your deployed Vercel frontend
 ]
 
+# CORS Configuration
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"], # Allows all HTTP methods (GET, POST, PUT, DELETE, etc.)
-    allow_headers=["*"], # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 # Routes
 app.include_router(auth_routes.router)
